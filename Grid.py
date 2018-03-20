@@ -115,9 +115,12 @@ class GridRow(object):
 		A GridRow is equal to another one if all elements are equal.
 		'''
 		if isinstance(other,GridRow):
-			for i,element in enumerate(self._elements):
-				if element != other[i]:
-					return False
+			if len(self) == len(other):
+				for i,element in enumerate(self.elements):
+					if element != other[i]:
+						return False
+			else:
+				return False
 			return True
 		else:
 			print '[GridRow|__eq__]: Non compatible types',self.__class__,'and',other.__class__
