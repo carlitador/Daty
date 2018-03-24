@@ -205,7 +205,7 @@ def isJsonField(s):
 	else:
 		return False
 
-def dictToJson(jsonDict,pretty,tabIndex=1,init=True):
+def dictToJsonString(jsonDict,pretty=True,tabIndex=1,init=True):
 	'''
 	[Description]
 		Convert dict or OrderedDict into its JSON string representation.
@@ -236,14 +236,14 @@ def dictToJson(jsonDict,pretty,tabIndex=1,init=True):
 	for field in jsonDict:
 		if isinstance(jsonDict[field],dict):
 			jsonString += tab+'"'+field+'":\n'
-			jsonString += tab+dictToJson(jsonDict[field],pretty,tabIndex+1,init=False)
+			jsonString += tab+dictToJsonString(jsonDict[field],pretty,tabIndex+1,init=False)
 		elif type(jsonDict[field]) == list:
 			if len(jsonDict[field]) > 0:
 				if isinstance(jsonDict[field][0],dict):
 					jsonString += tab+'"'+field+'":\n'
 					jsonString += tab+'[\n'
 					for i,listElement in enumerate(jsonDict[field]):
-						jsonString += tab_next+dictToJson(jsonDict[field][i],pretty,tabIndex+2,init=False)
+						jsonString += tab_next+dictToJsonString(jsonDict[field][i],pretty,tabIndex+2,init=False)
 					jsonString = jsonString[:-2]+'\n' # remove last comma.
 					jsonString += tab+'],\n'
 				else:
@@ -476,7 +476,7 @@ class SmartJson(object):
 					print '[SmartJson|_saveAsFolder]: Saving file',key
 					# convert dict to JSON string, insert comments and write file.
 					if extension == 'json':
-						jsonString = dictToJson(_jsonDict[key],pretty)
+						jsonString = dictToJsonString(_jsonDict[key],pretty)
 						currentJsonCommentsDict = {}
 						parent = ':'.join(filePath.split(basePath)[-1].split(os.path.sep))[1:]			
 						for commentKey in self.comments:
@@ -515,7 +515,7 @@ class SmartJson(object):
 			*pretty (bool): Tabulate rows for better readability.
 			->return (str): JSON string representation of self.dict.
 		'''
-		jsonString = dictToJson(self.dict,pretty)
+		jsonString = dictToJsonString(self.dict,pretty)
 		if comments == True:
 			jsonString = insertComments(jsonString,self.comments)
 		return jsonString
