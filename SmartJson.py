@@ -275,6 +275,8 @@ def matchDicts(dict1,dict2):
 		dict1 (dict): Dict being replaced its values by another.
 		dict2 (dict): Dict replacing the values to another.
 	'''
+	dict1 = deepcopy(dict1)
+	dict2 = deepcopy(dict2)
 	for key in dict2:
 		if key in dict1:
 			if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
