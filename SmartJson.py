@@ -189,7 +189,7 @@ def parseComments(jsonString):
 def isJsonField(s):
 	'''
 	[Description]
-		Determine if string is a JSON field by checking if it of
+		Determine if string is a JSON field by checking if it is of
 		the form "fieldName": or "fieldName":fieldValue.
 	[Arguments]
 		s (str): String to be checked.
@@ -211,7 +211,7 @@ def dictToJsonString(jsonDict,pretty=True,tabIndex=1,init=True):
 		Convert dict or OrderedDict into its JSON string representation.
 	[Arguments]
 		jsonDict (dict): JSON dictionary.
-		pretty (bool): Tabulate rows for better readability.
+		*pretty (bool): Tabulate rows for better readability.
 		*tabIdenx (int): Current tabulate depth level.
 		*init (bool): Set to True on first call so that no commas are added to last closing bracket.
 		->return (str): JSON string representation of dictionary-like object.
