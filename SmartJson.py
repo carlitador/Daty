@@ -266,6 +266,25 @@ def dictToJsonString(jsonDict,pretty=True,tabIndex=1,init=True):
 		jsonString = jsonString[:-1]+',\n'
 	return jsonString
 
+def matchDicts(dict1,dict2):
+	'''
+	[Description]
+		Change dictionary values by matching keys from another dictionary.
+		All the keys of dict 1 that appear in dict 2 will be modified to dict 2 value.
+	[Arguments]
+		dict1 (dict): Dict being replaced its values by another.
+		dict2 (dict): Dict replacing the values to another.
+	'''
+	for key in dict2:
+		if key in dict1:
+			if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
+				dict1[key] = matchDicts(dict1[key],dict2[key])
+			else:
+				dict1[key] = dict2[key]
+		else:
+			print '[SmartJson|matchDicts]: Key "'+key+'" not found.'
+	return dict1
+
 class SmartJson(object):
 	'''
 	Advanced functionality for handling JSON files.
