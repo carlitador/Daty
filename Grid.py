@@ -450,7 +450,10 @@ class Grid(object):
 		elif header == True:
 			header = self.grid.pop(0)
 		if len(self.grid) > 0:
-			assert(len(header) == len(self.grid[0]))
+			if len(header) != len(self.grid[0]):
+				assert(len(header) == len(self.grid[1]))
+				print 'WARNING [Daty|Grid|_initHeader]: Invalid header removed and set to given header:',header
+				self.grid.pop(0)
 		self.fieldIndex = dict([(item,i) for i,item in enumerate(header)])
 		self._header = header
 
