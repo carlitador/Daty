@@ -858,7 +858,7 @@ class Grid(object):
 
 	# plotting
 
-	def plot_2d(self,xFields,yFields,*args,**kwargs):
+	def plot_line(self,xFields,yFields,*args,**kwargs):
 		'''
 		[Description]
 			Basic 2d line plot of given fields.
@@ -876,7 +876,7 @@ class Grid(object):
 			yFields = [yFields]
 		xFields = [self[field] for field in xFields]
 		yFields = [self[field] for field in yFields]
-		return pyVeo.basic2D(xFields,yFields,*args,**kwargs)
+		return pyVeo.plot_line(xFields,yFields,*args,**kwargs)
 
 	def plot_contour(self,xField,yField,zField,*args,**kwargs):
 		'''
@@ -891,9 +891,9 @@ class Grid(object):
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
 		from pyVeo import pyVeo
-		return pyVeo.contour(self[xField], self[yField], self[zField],*args,**kwargs)
+		return pyVeo.plot_contour(self[xField], self[yField], self[zField],*args,**kwargs)
 
-	def plot_3d(self,xField,yField,zField,*args,**kwargs):
+	def plot_surface(self,xField,yField,zField,*args,**kwargs):
 		'''
 		[Description]
 			Basic 3D plot of given fields.
@@ -906,7 +906,7 @@ class Grid(object):
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
 		from pyVeo import pyVeo
-		return pyVeo.basic3D(self[xField], self[yField], self[zField],*args,**kwargs)
+		return pyVeo.plot_surface(self[xField], self[yField], self[zField],*args,**kwargs)
 
 if __name__ == '__main__':
 
