@@ -355,7 +355,7 @@ class SmartJson(object):
 		'''
 		return self.dict.keys()
 
-	# Loaders
+	# Loaders.
 
 	def _loadFromFolder(self,basePath,_path=None):
 		'''
@@ -437,7 +437,7 @@ class SmartJson(object):
 		jsonDict = json.loads(jsonString,object_pairs_hook=OrderedDict)
 		return jsonDict,commentsDict
 
-	# Savers
+	# Savers.
 
 	def dump(self,path,mode='file',comments=True, pretty=True):
 		'''
@@ -525,7 +525,7 @@ class SmartJson(object):
 		text = self.asString(comments,pretty)
 		with open(path, 'w') as f: f.write(text)
 
-	# Utils
+	# Utils.
 
 	def asString(self,comments=True,pretty=True):
 		'''
@@ -540,3 +540,74 @@ class SmartJson(object):
 		if comments == True:
 			jsonString = insertComments(jsonString,self.comments)
 		return jsonString
+
+	# Modifiers.
+
+	def set(self,path,value):
+		'''
+		[Description]
+			Set dict key value.
+		[Arguments]
+			path (list[str]) Path to key.
+			value (str): Key value.
+		'''
+		_dict = self.get(path[:-1])
+		_dict[path[-1]] = value
+
+	def get(self,path):
+		'''
+		[Description]
+			Return dict key value.
+		[Arguments]
+			path (list[str]) Path to key.
+			->return (misc): Key value.
+		'''
+		_dict = self.dict
+		for key in path:
+			_dict = _dict[key]
+		return _dict
+
+	def remove(self,path):
+		'''
+		[Description]
+			Remove key from dict
+		[Arguments]
+			path (list[str]) Path to key.
+		'''
+		self.get(path[:-1]).pop(path[-1])
+
+	def rename(self,pathToCurrent,new):
+		'''
+		[Description]
+			Rename dict key.
+		[Arguments]
+			pathToCurrent (list[str]): Path to current key (including key).
+			new (str): New key name.
+		'''
+		# Reassing to new key with new name and delete old key.
+		self.set(pathToCurrent[:-1]+[new],self.get(pathToCurrent))
+		self.remove(pathToCurrent)
+		# Update comments dict.
+		for key in self.comments:
+			if key.startswith(':'.join(pathToCurrent)):
+				newKey = new.join(key.split(pathToCurrent[-1]))
+				self.comments[newKey] = self.comments[key]
+				del self.comments[key]
+
+if __name__ == '__main__':
+
+	project = SmartJson('/home/tomas/MEGA/Work/E2F/VPP/base_rev1')
+
+	#project.set(['modules', 'Mass_yacht.json'],'derp')
+	#print project.get(['modules', 'Mass_yacht.json'])
+
+	print project.get(['modules','Mass_yacht.json','general','type'])
+	print project.comments['modules:Mass_yacht.json:general:type']
+
+	project.rename(['modules','Mass_yacht.json'],'derp')
+
+	print project.get(['modules', 'derp', 'general', 'type'])
+	print project.comments['modules:derp:general:type']
+
+	#print project.comments['modules:Mass_yacht.json:general:type']
+	#print project.get(['modules', 'Mass_yacht.json', 'general', 'type'])
