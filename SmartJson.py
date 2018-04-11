@@ -584,15 +584,17 @@ class SmartJson(object):
 			pathToCurrent (list[str]): Path to current key (including key).
 			new (str): New key name.
 		'''
-		# Reassing to new key with new name and delete old key.
-		self.set(pathToCurrent[:-1]+[new],self.get(pathToCurrent))
-		self.remove(pathToCurrent)
-		# Update comments dict.
-		for key in self.comments:
-			if key.startswith(':'.join(pathToCurrent)):
-				newKey = new.join(key.split(pathToCurrent[-1]))
-				self.comments[newKey] = self.comments[key]
-				del self.comments[key]
+		if pathToCurrent[-1] != new: # Only rename if new name is different from old.
+			# Reassing to new key with new name and delete old key.
+			self.set(pathToCurrent[:-1]+[new],self.get(pathToCurrent))
+			self.remove(pathToCurrent)
+			# Update comments dict.
+			for key in self.comments:
+				if key.startswith(':'.join(pathToCurrent)):
+					newKey = new.join(key.split(pathToCurrent[-1]))
+					if key != newKey:
+						self.comments[newKey] = self.comments[key]
+						del self.comments[key]
 
 if __name__ == '__main__':
 
