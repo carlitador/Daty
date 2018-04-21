@@ -108,3 +108,44 @@ def dynamicTyped(s,forceFloat=True):
 		return [dynamicTyped(i) for i in s]
 	else:
 		return s
+
+def parse(contents,dynamicType=True,noneEmpty=True,sep=',',listSep=';'):
+	'''
+	[Description]
+		Parse the raw contents of a text file.
+	[Arguments]
+		contents (lits[str]): List of strings, each one corresponding to a row.
+		*dynamicType (bool): Convert elements to python type automatically.
+		*noneEmpty (bool): Set empty values to None.
+		*sep (str): Element separator.
+		*listSep (str/None): A separator to identify elements that belong to a list.
+	'''
+	contents = [row.strip().split(sep) for row in contents]
+	# set empty values to None
+	if noneEmpty == True:
+		filteredContents = []
+		for row in contents:
+			newRow = []
+			for element in row:
+				if element == '':
+					newRow.append(None)
+				else: newRow.append(element)
+			filteredContents.append(newRow)
+		contents = filteredContents
+	# parse lists
+	if listSep != None:
+		filteredContents = []
+		for row in contents:
+			newRow = []
+			for element in row:
+				if len(element.split(listSep)) > 1:
+					if element[0] == '[' and element[-1] == ']':
+						element = element[1:-1]
+					newRow.append(element.split(listSep))
+				else: newRow.append(element)
+			filteredContents.append(newRow)
+		contents = filteredContents
+	# set values type automatically
+	if dynamicType == True:
+		contents = [dynamicTyped(row) for row in contents]
+	return contents

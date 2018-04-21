@@ -4,7 +4,7 @@ from collections import OrderedDict
 import json
 from numbers import Number
 # Utils
-from utils import dynamicTyped
+from utils import dynamicTyped, parse
 
 '''
 To Do:
@@ -251,7 +251,7 @@ class Grid(object):
 		# path to grid given. Read file and parse.
 		if type(grid) == str:
 			with open(grid,'r') as f: grid = f.readlines()
-			self.grid = self._parse(grid,**kwargs)
+			self.grid = self.parse(grid,**kwargs)
 		# grid given as a list of lists. Grid is assigned to gridrows directly.
 		elif type(grid) == list:
 			self.grid = grid
@@ -393,47 +393,6 @@ class Grid(object):
 		self.grid.remove(row)
 
 	# private methods
-
-	def _parse(self,grid,dynamicType=True,noneEmpty=True,sep=',',listSep=';'):
-		'''
-		[Description]
-			Parse the raw contents of a text file containing grid.
-		[Arguments]
-			grid (lits[str]): List of strings, each one corresponding to a grid row with all comma separated elements.
-			*dynamicType (bool): Convert elements to python type automatically.
-			*noneEmpty (bool): Set empty values to None.
-			*sep (str): Element separator.
-			*listSep (str/None): A separator to identify elements that belong to a list.
-		'''
-		grid = [row.strip().split(sep) for row in grid]
-		# set empty values to None
-		if noneEmpty == True:
-			newGrid = []
-			for row in grid:
-				newRow = []
-				for element in row:
-					if element == '':
-						newRow.append(None)
-					else: newRow.append(element)
-				newGrid.append(newRow)
-			grid = newGrid
-		# parse lists
-		if listSep != None:
-			newGrid = []
-			for row in grid:
-				newRow = []
-				for element in row:
-					if len(element.split(listSep)) > 1:
-						if element[0] == '[' and element[-1] == ']':
-							element = element[1:-1]
-						newRow.append(element.split(listSep))
-					else: newRow.append(element)
-				newGrid.append(newRow)
-			grid = newGrid
-		# set values type automatically
-		if dynamicType == True:
-			grid = [dynamicTyped(row) for row in grid]
-		return grid
 
 	def _initHeader(self,header):
 		'''
