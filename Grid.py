@@ -865,18 +865,18 @@ class Grid(object):
 		[Arguments]
 			xFields (list[str]/str): Name of field (or list of field names) to use as X values.
 			yFields (list[str]/str): Name of field (or list of field names) to use as Y values.
-			*args (misc): Args passed to pyVeo.basic2D()
-			**kwargs (misc): Kwargs passed to pyVeo.basic2D()
+			*args (misc): Args passed to pyVeo.static.basic2D()
+			**kwargs (misc): Kwargs passed to pyVeo.static.basic2D()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
-		from pyVeo import pyVeo
+		from pyVeo import static
 		if type(xFields) != list:
 			xFields = [xFields]
 		if type(yFields) != list:
 			yFields = [yFields]
 		xFields = [self[field] for field in xFields]
 		yFields = [self[field] for field in yFields]
-		return pyVeo.plot_line(xFields,yFields,*args,**kwargs)
+		return static.plot_line(xFields,yFields,*args,**kwargs)
 
 	def plot_contour(self,xField,yField,zField,*args,**kwargs):
 		'''
@@ -886,12 +886,12 @@ class Grid(object):
 			xField (str): Name of field to use as X values.		
 			yField (str): Name of field to use as Y values.
 			zField (str): Name of field to use as Z values.			
-			*args (misc): Args passed to pyVeo.contour()
-			**kwargs (misc): Kwargs passed to pyVeo.contour()
+			*args (misc): Args passed to pyVeo.static.contour()
+			**kwargs (misc): Kwargs passed to pyVeo.static.contour()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
-		from pyVeo import pyVeo
-		return pyVeo.plot_contour(self[xField], self[yField], self[zField],*args,**kwargs)
+		from pyVeo import static
+		return static.plot_contour(self[xField], self[yField], self[zField],*args,**kwargs)
 
 	def plot_surface(self,xField,yField,zField,*args,**kwargs):
 		'''
@@ -901,12 +901,12 @@ class Grid(object):
 			xField (str): Name of field to use as X values.		
 			yField (str): Name of field to use as Y values.
 			zField (str): Name of field to use as Z values.
-			*args (misc): Args passed to pyVeo.basic3D()
-			**kwargs (misc): Kwargs passed to pyVeo.basic3D()
+			*args (misc): Args passed to pyVeo.static.basic3D()
+			**kwargs (misc): Kwargs passed to pyVeo.static.basic3D()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
-		from pyVeo import pyVeo
-		return pyVeo.plot_surface(self[xField], self[yField], self[zField],*args,**kwargs)
+		from pyVeo import static
+		return static.plot_surface(self[xField], self[yField], self[zField],*args,**kwargs)
 
 if __name__ == '__main__':
 
