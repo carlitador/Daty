@@ -51,6 +51,12 @@ def dynamicTyped(s,forceFloat=True):
 				return True
 			except:
 				return False
+		elif 'e' in s.lower():
+			try:
+				float(s)
+				return True
+			except:
+				return False
 		else:
 			return False
 
