@@ -541,13 +541,6 @@ class Grid(object):
 
 	# transform
 
-	# def asDataFrame(self):
-	# 	'''
-	# 	Returns a pandas.DataFrame representation of Grid
-	# 	'''
-	# 	import pandas as pd
-	# 	return pd.DataFrame(data=deepcopy(self.asList),columns=deepcopy(self.header))
-
 	def asJson(self,roundFloats=None):
 		'''
 		Return Grid in json format as:
