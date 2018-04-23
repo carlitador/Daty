@@ -251,7 +251,7 @@ class Grid(object):
 		# path to grid given. Read file and parse.
 		if type(grid) == str:
 			with open(grid,'r') as f: grid = f.readlines()
-			self.grid = self.parse(grid,**kwargs)
+			self.grid = parse(grid,**kwargs)
 		# grid given as a list of lists. Grid is assigned to gridrows directly.
 		elif type(grid) == list:
 			self.grid = grid
@@ -864,7 +864,7 @@ class Grid(object):
 if __name__ == '__main__':
 
 	import os
-	path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'tests','grid-samples','simulation.csv')
+	path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'tests','data-samples','simulation.csv')
 
 	grid = Grid(path)
 
@@ -892,7 +892,7 @@ if __name__ == '__main__':
 	print grid.fieldRange('TWS')
 	print grid[{'TWA': grid.fieldRange('TWA')[0]}]
 
-	grid[{'TWA':grid.fieldRange('TWA')[0]}].plot_2d('TWS','Vs')
+	grid[{'TWA':grid.fieldRange('TWA')[0]}].plot_line('TWS','Vs')
 
 	# #load file
 	# pathToGrid = '/home/tomas/MEGA/Work/49er/VPP/results/5DoF.csv'
