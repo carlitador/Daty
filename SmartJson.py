@@ -1,7 +1,6 @@
 import os
 import json
 from collections import OrderedDict, MutableMapping
-import mimetypes
 from copy import deepcopy
 
 def flattenDict(dictToFlatten,separator=':',dictConstructor=OrderedDict):
@@ -303,46 +302,56 @@ class SmartJson(object):
 		self.files = files
 		self.binaries = binaries
 		if isinstance(path, dict):
-			self.dict = path
+			self._dict = path
 			self.comments = {}
 		elif os.path.isdir(path):
 			print '[SmartJson|__init__]: Loading JSON from folder:',path
-			self.dict, self.comments = self._loadFromFolder(path)
+			self._dict, self.comments = self._loadFromFolder(path)
 		elif os.path.isfile(path):
 			print '[SmartJson|__init__]: Loading JSON from file:',path
-			self.dict, self.comments = self._loadFromFile(path)
+			self._dict, self.comments = self._loadFromFile(path)
 		elif type(path) == str:
 			print '[SmartJson|__init__]: Loading JSON from string.'
-			self.dict, self.comments = self._loadFromString(path)
+			self._dict, self.comments = self._loadFromString(path)
 		else:
 			raise TypeError('[SmartJson|__init__]: File type not supported:'+str(type(path)))
 		#
 		if byteifyDict ==  True:
-			self.dict = byteify(self.dict)
+			self._dict = byteify(self._dict)
 		if floatifyDict == True:
-			self.dict = floatify(self.dict)
+			self._dict = floatify(self._dict)
 
-	def __getitem__(self,field):
+	def __getitem__(self,key):
 		'''
 		Treat SmartJson as a dict.
 		'''
-		return self.dict[field]
+		if type(key) == str:
+			return self._dict[key]
+		elif type(key) == list:
+			return self._getFromPath(key)
+		else:
+			raise TypeError('Type '+str(type(key))+' is not supported')
 
-	def __setitem__(self,field,value):
+	def __setitem__(self,key,value):
 		'''
 		Treat SmartJson as a dict.
 		'''
-		self.dict[field] = value
+		if type(key) == str:
+			self._dict[key] = value
+		elif type(key) == list:
+			self._setFromPath(key,value)
+		else:
+			raise TypeError('Type '+str(type(key))+' is not supported')
 
 	def __iter__(self):
 		'''
 		Treat SmartJson as a dict.
 		'''
-		return self.dict.keys().__iter__()
+		return self._dict.keys().__iter__()
 
 	def __repr__(self):
 		'''
-		Return self.dict key-value paris.
+		Return self._dict key-value paris.
 		'''
 		keyVals = []
 		for key in self:
@@ -353,7 +362,21 @@ class SmartJson(object):
 		'''
 		Treat SmartJson as a dict.
 		'''
-		return self.dict.keys()
+		return self._dict.keys()
+
+	def pop(self, key):
+		'''
+		[Description]
+			Remove key from dict and comments dict.
+		[Arguments]
+			key (list[str]/str) Key or path to key to pop.
+		'''
+		if type(key) == str:
+			return self._dict.pop(key)
+		elif type(key) == list:
+			return self._popFromPath(key)
+		else:
+			raise TypeError('Type '+str(type(key))+' is not supported')
 
 	# Loaders.
 
@@ -459,7 +482,7 @@ class SmartJson(object):
 	def _saveAsFolder(self,basePath,_path=None,_jsonDict=None,overwrite=True,comments=True,pretty=True):
 		'''
 		[Description]
-			Save project as different separated folders based on its JSON representation.
+			Save as folder structure.
 		[Arguments]
 			basePath (str): Path to folder to load.
 			*_path (str): Path to subfolder to load (called recursively).
@@ -469,7 +492,7 @@ class SmartJson(object):
 			*pretty (bool): Tabulate rows for better readability.
 		'''
 		if _jsonDict == None:
-			_jsonDict = deepcopy(self.dict)
+			_jsonDict = deepcopy(self._dict)
 			if not os.path.exists(basePath):
 				os.mkdir(basePath)
 
@@ -530,7 +553,7 @@ class SmartJson(object):
 	def asString(self,comments=True,pretty=True):
 		'''
 		[Description]
-			Returns a JSON string representation of self.dict.
+			Returns a JSON string representation of self._dict.
 		[Arguments]
 			*comments (bool): Write comments to JSON.
 			*pretty (bool): Tabulate rows for better readability.
@@ -543,7 +566,7 @@ class SmartJson(object):
 
 	# Modifiers.
 
-	def set(self,path,value):
+	def _setFromPath(self,path,value):
 		'''
 		[Description]
 			Set dict key value.
@@ -551,10 +574,10 @@ class SmartJson(object):
 			path (list[str]) Path to key.
 			value (str): Key value.
 		'''
-		_dict = self.get(path[:-1])
+		_dict = self[path[:-1]]
 		_dict[path[-1]] = value
 
-	def get(self,path):
+	def _getFromPath(self,path):
 		'''
 		[Description]
 			Return dict key value.
@@ -562,19 +585,23 @@ class SmartJson(object):
 			path (list[str]) Path to key.
 			->return (misc): Key value.
 		'''
-		_dict = self.dict
+		_dict = self._dict
 		for key in path:
 			_dict = _dict[key]
 		return _dict
 
-	def remove(self,path):
+	def _popFromPath(self,path):
 		'''
 		[Description]
-			Remove key from dict
+			Remove key from dict and comments dict.
 		[Arguments]
 			path (list[str]) Path to key.
 		'''
-		self.get(path[:-1]).pop(path[-1])
+		_pop = self[path[:-1]].pop(path[-1])
+		for key in self.comments:
+			if key.startswith(':'.join(path)):
+				self.comments.pop(key)
+		return _pop
 
 	def rename(self,pathToCurrent,new):
 		'''
@@ -586,8 +613,8 @@ class SmartJson(object):
 		'''
 		if pathToCurrent[-1] != new: # Only rename if new name is different from old.
 			# Reassing to new key with new name and delete old key.
-			self.set(pathToCurrent[:-1]+[new],self.get(pathToCurrent))
-			self.remove(pathToCurrent)
+			self[pathToCurrent[:-1]+[new]] = self[pathToCurrent]
+			self.pop(pathToCurrent)
 			# Update comments dict.
 			for key in self.comments:
 				if key.startswith(':'.join(pathToCurrent)):
