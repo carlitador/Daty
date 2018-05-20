@@ -1,7 +1,7 @@
 import os
 import json
 from collections import OrderedDict, MutableMapping
-from copy import deepcopy
+import copy
 
 def flattenDict(dictToFlatten,separator=':',dictConstructor=OrderedDict):
 	'''
@@ -274,8 +274,8 @@ def matchDicts(dict1,dict2):
 		dict1 (dict): Dict being replaced its values by another.
 		dict2 (dict): Dict replacing the values to another.
 	'''
-	dict1 = deepcopy(dict1)
-	dict2 = deepcopy(dict2)
+	dict1 = copy.deepcopy(dict1)
+	dict2 = copy.deepcopy(dict2)
 	for key in dict2:
 		if key in dict1:
 			if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
@@ -303,16 +303,16 @@ class SmartJson(object):
 		self.binaries = binaries
 		if isinstance(path, dict):
 			self._dict = path
-			self.comments = {}
+			self._comments = {}
 		elif os.path.isdir(path):
 			print '[SmartJson|__init__]: Loading JSON from folder:',path
-			self._dict, self.comments = self._loadFromFolder(path)
+			self._dict, self._comments = self._loadFromFolder(path)
 		elif os.path.isfile(path):
 			print '[SmartJson|__init__]: Loading JSON from file:',path
-			self._dict, self.comments = self._loadFromFile(path)
+			self._dict, self._comments = self._loadFromFile(path)
 		elif type(path) == str:
 			print '[SmartJson|__init__]: Loading JSON from string.'
-			self._dict, self.comments = self._loadFromString(path)
+			self._dict, self._comments = self._loadFromString(path)
 		else:
 			raise TypeError('[SmartJson|__init__]: File type not supported:'+str(type(path)))
 		#
@@ -357,6 +357,17 @@ class SmartJson(object):
 		for key in self:
 			keyVals.append(key)
 		return '\n'.join(keyVals)
+
+	def asDict(self):
+		'''
+		'''
+		return copy.deepcopy(self._dict)
+
+	@property
+	def comments(self):
+		'''
+		'''
+		return copy.deepcopy(self._comments)
 
 	def keys(self):
 		'''
@@ -523,9 +534,9 @@ class SmartJson(object):
 						jsonString = dictToJsonString(_jsonDict[key],pretty)
 						currentJsonCommentsDict = {}
 						parent = ':'.join(filePath.split(basePath)[-1].split(os.path.sep))[1:]			
-						for commentKey in self.comments:
+						for commentKey in self._comments:
 							if parent in commentKey:
-								currentJsonCommentsDict[commentKey.split(parent)[-1][1:]] = self.comments[commentKey]
+								currentJsonCommentsDict[commentKey.split(parent)[-1][1:]] = self._comments[commentKey]
 						if comments == True:
 							jsonString = insertComments(jsonString,currentJsonCommentsDict)
 						with open(filePath, 'w') as f: f.write(jsonString)
@@ -557,11 +568,11 @@ class SmartJson(object):
 		[Arguments]
 			*comments (bool): Write comments to JSON.
 			*pretty (bool): Tabulate rows for better readability.
-			->return (str): JSON string representation of self.dict.
+			->return (str): JSON string representation of self._dict.
 		'''
-		jsonString = dictToJsonString(self.dict,pretty)
+		jsonString = dictToJsonString(self._dict,pretty)
 		if comments == True:
-			jsonString = insertComments(jsonString,self.comments)
+			jsonString = insertComments(jsonString,self._comments)
 		return jsonString
 
 	# Modifiers.
@@ -598,9 +609,9 @@ class SmartJson(object):
 			path (list[str]) Path to key.
 		'''
 		_pop = self[path[:-1]].pop(path[-1])
-		for key in self.comments:
+		for key in self._comments:
 			if key.startswith(':'.join(path)):
-				self.comments.pop(key)
+				self._comments.pop(key)
 		return _pop
 
 	def rename(self,pathToCurrent,new):
@@ -616,12 +627,12 @@ class SmartJson(object):
 			self[pathToCurrent[:-1]+[new]] = self[pathToCurrent]
 			self.pop(pathToCurrent)
 			# Update comments dict.
-			for key in self.comments:
+			for key in self._comments:
 				if key.startswith(':'.join(pathToCurrent)):
 					newKey = new.join(key.split(pathToCurrent[-1]))
 					if key != newKey:
-						self.comments[newKey] = self.comments[key]
-						del self.comments[key]
+						self._comments[newKey] = self._comments[key]
+						del self._comments[key]
 
 if __name__ == '__main__':
 
