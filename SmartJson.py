@@ -614,6 +614,15 @@ class SmartJson(object):
 				self._comments.pop(key)
 		return _pop
 
+	def merge(self,path,smartJson):
+		'''
+		'''
+		self[path] = smartJson.asDict()
+		for comment in smartJson._comments:
+			commentPath = ':'.join(path)+':'+comment
+			print 'Adding comment',commentPath,smartJson.comments[comment]
+			self._comments[commentPath] = smartJson.comments[comment]
+
 	def rename(self,pathToCurrent,new):
 		'''
 		[Description]
