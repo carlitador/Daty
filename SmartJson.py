@@ -503,7 +503,7 @@ class SmartJson(object):
 			*pretty (bool): Tabulate rows for better readability.
 		'''
 		if _jsonDict == None:
-			_jsonDict = deepcopy(self._dict)
+			_jsonDict = copy.deepcopy(self._dict)
 			if not os.path.exists(basePath):
 				os.mkdir(basePath)
 
