@@ -566,6 +566,13 @@ class Grid(object):
 
 	# row (GridRow) manipulation
 
+	def clear(self):
+		'''
+		[Description]
+			Delete all grid rows.
+		'''
+		self.grid = []
+
 	def index(self,row,reverse=False):
 		'''
 		Returns the index of a given row.
