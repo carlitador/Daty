@@ -4,74 +4,93 @@ Data manipulation toolbox.
 ## Dependancies
 - pyVeo (optional)
 
-## Examples
-### Grid
+## Usage Guide - Grid
 #### Basics
-- Read from CSV file:
+- Initialize Grid:
 ```python
-grid = Grid(pathToFile) # Data types (list, str, float, bool and None) will be assigned automatically.
+# Read from csv file (data types (list, str, float, bool and None) will be assigned automatically):
+grid = Grid(pathToFile)
+# or, initialize direct from list of lists:
+grid = Grid(some_list_of_lists)
+# or, initialize emtpy with a header:
+grid = Grid([],['speed','leeway','Total_Fx','Total_Fy'])
 ```
-- Initialize from list of lists:
+- Get data info:
 ```python
-grid = Grid(some_list)
-```
-- Print header:
-```python
-print grid.header
+print grid.header               # Data header (column names).
+print len(grid)                 # Number of rows.
+print grid.hape()               # Number of rows x Number of columns.
+print grid.head()               # Grid first 4 rows (can pass any other number of rows as argument).
+print grid.tail()               # Grid last 4 rows (can pass any other number of rows as argmuent).
+print grid.bounds('Total_Fx')   # Min anx max bounds of 'Total_Fx' field (column).
+print grid.fieldRange('speed')  # All distinct values of 'speed' field (column).
 ```
 #### Querying data
-- Get a list with all "Total_Fx" column values:
+- Get grid fields (columns):
 ```python
-total_fx = grid['Total_Fx']
+grid['Total_Fx']                # List with all "Total_Fx" column values.
+grid['speed':'Total_Fx']        # List of lists with all column values of fields "speed" to "Total_Fx".
+grid[['Total_Fx','Total_Fy']]   # List of lists with all "Total_Fx" and "Total_Fy" column valuess.
+
 ```
-- Get the 3rd grid row:
+- Get grid rows:
 ```python
-thrid_row = grid[2]
+row = grid[2]          # 3rd grid row.
+rows = grid[1:10]      # 1st to 10th rows (list).
+rows = grid[[1,3,8]]   # 1st, 3rd and 8th rows (list).
 ```
-- Note that all grid rows are GridRow objects, which are similar to dicts:
+- Note that all grid rows are GridRow objects, which are similar to OrderedDicts but with some additional methods: 
 ```python
-print thrid_row['Total_Fx']
+some_row = grid[2]
+some_row['Total_Fx']      # Access "Total_Fx" value.
+some_row.values()         # Get all row values as a list.
+some_row.keys()           # Get all row fields as a list.
+some_row.pop('Total_Fx')  # Remove field field from row (does not affect original Grid).
+some_row.round(2)         # Row values with floats rounded to 2 decimal places.
+some_row.asDict()         # OrdereDict equivalent of row.
+some_row.asString()       # String representation of row.
+
 ```
 #### Filtering data
-- Get rows that match a specific value for one of its columns:
+- Grid rows can be filtered using curly brakets {}:
 ```python
-important_Fx = grid[{'Total_Fx':'5'}]
+grid[{'Total_Fx':'5'}]                                              # Get rows that match a specific value for one of its columns.
+grid[{'Total_Fx':'<5'}]                                             # Get rows that are smaller than a specific value for one of its columns.
+grid[{'funcs':lambda row:row['Total_Fx']+row['Total_Fy'] > 1000}]   # Get rows that return True to the given filtering function:
 ```
-- Get rows that are smaller than a specific value for one of its columns:
+- Filtering operations return a Grid object, therefore filters can be concatenated:
 ```python
-small_Fx = grid[{'Total_Fx':'<5'}]
+grid[{'Total_Fx':'10'}]grid[{'Total_Fx':'>2'}][{'funcs':lambda row:row['Total_Fx']+row['Total_Fy'] > 1000}]
 ```
-- Get rows that return True to the given filtering function:
+#### Adding data to grid
 ```python
-some_Fx = grid[{'funcs':lambda row:row['Total_Fx']+row['Total_Fy'] > 1000}]
-```
-- Note that filtering actions return a Grid object, therefore filters can be concatenated:
-```python
-some_small_important_Fx = grid[{'funcs':lambda row:row['Total_Fx']+row['Total_Fy'] > 1000}][{'Total_Fx':'<5'}]grid[{'Total_Fx':'5'}]
-```
-#### Adding data
-- Add a new column with all values set to 0:
-```python
-grid['new_column'] = 0
-```
-- Add a new column with a list of values:
-```python
-grid['new_column'] = a_list_of_values # Length of 'a_list_of_values' must match gird length.
-```
-- Add a new column by combining the values of other columns:
-```python
-grid['new_column'] = lambda row: (row['Total_Fy'] + row['Total_Fz'])**2
+grid['new_column'] = 0                                                  # Add a new column with all values set to 0.
+grid['new_column'] = a_list_of_values                                   # Add a new column with a list of values.
+grid['new_column'] = lambda row: (row['Total_Fy'] + row['Total_Fz'])**2 # Add a new column by combining the values of other columns.
 ```
 #### Plotting (requires pyVeo)
-- Line plot:
+- Basic plotting capabilities are provided:
 ```python
-gird.plot_line('speed','Total_Fx')
+gird.plot_line('speed','Total_Fx')              # Line plot
+gird.plot_contour('speed','leeway','Total_Fx')  # 2D Contour plot
+gird.plot_surface('speed','leeway','Total_Fx')  # 3D Surface plot
 ```
-- 2D Contour plot:
+- It is also possible to plot on an existing matplotlib plot:
 ```python
-gird.plot_contour('speed','leeway','Total_Fx')
+ax = plt.figure().gca()
+gird.plot_line('speed','Total_Fx',ax=ax) # Line plot
 ```
-- 3D Surface plot:
+- Plotting functions take several arguments to control formatting (see pyVeo):
 ```python
-gird.plot_surface('speed','leeway','Total_Fx')
+gird.plot_line('speed','Total_Fx',title='Force [N]',color='r',marker='o',splineDensity=100) # Line plot
+```
+
+## Usage Guide - SmartJson
+#### Basics
+- Initialize SmartJson:
+```python
+# Initialize from folder structure:
+sjson = SmartJson(pathToFolder)
+# or, initialize from JSON file:
+sjson = Grid(pathToFile)
 ```
