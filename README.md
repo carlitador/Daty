@@ -19,7 +19,7 @@ grid = Grid([],['speed','leeway','Total_Fx','Total_Fy'])
 ```python
 print grid.header               # Data header (column names).
 print len(grid)                 # Number of rows.
-print grid.hape()               # Number of rows x Number of columns.
+print grid.shape()               # Number of rows x Number of columns.
 print grid.head()               # Grid first 4 rows (can pass any other number of rows as argument).
 print grid.tail()               # Grid last 4 rows (can pass any other number of rows as argmuent).
 print grid.bounds('Total_Fx')   # Min anx max bounds of 'Total_Fx' field (column).
@@ -35,9 +35,9 @@ grid[['Total_Fx','Total_Fy']]   # List of lists with all "Total_Fx" and "Total_F
 ```
 - Get grid rows:
 ```python
-row = grid[2]          # 3rd grid row.
-rows = grid[1:10]      # 1st to 10th rows (list).
-rows = grid[[1,3,8]]   # 1st, 3rd and 8th rows (list).
+grid[2]         # 3rd grid row.
+grid[1:10]      # 1st to 10th rows (list).
+grid[[1,3,8]]   # 1st, 3rd and 8th rows (list).
 ```
 - Note that all grid rows are GridRow objects, which are similar to OrderedDicts but with some additional methods: 
 ```python
