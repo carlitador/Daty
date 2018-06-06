@@ -155,13 +155,28 @@ class GridRow(object):
 		Delete element and corresponding header entry.
 		'''
 		index = self.header.index(field)
-		self._elements.pop(index)
+		element = self._elements.pop(index)
 		newHeader = self.header
 		newHeader.pop(index)
 		self.header = newHeader
+		return element
 		# # this function could be simplified as:
 		# self.header.pop(self._fieldIndexDict[field])
 		# self._elements.pop(self._fieldIndexDict[field])
+
+	def keys(self):
+		'''
+		Return DataRow fields (header).
+		Same as self.header but with a more dict-like syntax.
+		'''
+		return self.header
+
+	def values(self):
+		'''
+		Return DataRow values (elements).
+		Same as self.elements but with a more dict-like syntax.
+		'''
+		return self.elements
 
 	def index(self,element):
 		'''
