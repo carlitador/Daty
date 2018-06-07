@@ -730,9 +730,9 @@ class Grid(object):
 		'''
 		Rename field.
 		'''
-		self.header[self.header.index(oldName)] = newName
-		for row in self:
-			row.header[row.header.index(oldName)] = newName
+		tmpHeader = self.header
+		tmpHeader[self.header.index(oldName)] = newName
+		self.header = tmpHeader
 
 	# filters
 
