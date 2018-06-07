@@ -276,6 +276,8 @@ class Grid(object):
 		self._initHeader(header)
 		# create grid as a list of GridRows
 		self.grid = [GridRow(row,self.header) for row in self.grid]
+		# remove None header fields
+		self.removeColumn([columnIndex for columnIndex,column in enumerate(self.header) if column == None])
 		# default settings
 		self.defaultFilterRule = 'OR'
 
@@ -690,10 +692,17 @@ class Grid(object):
 
 	def removeColumn(self,fields):
 		'''
-		Removes column (or columns) from grid.
+		[Description]
+			Removes column (or columns) from grid.
+		[Arguments]
+			fields (int/str/list[int/str]): Name or column index of fields to delete.
 		'''
 		if type(fields) != list:
 			fields = [fields]
+		# Convert any given column index to its field name.
+		for i,field in enumerate(fields):
+			if type(field) == int:
+				fields[i] = self.header[field]
 		for field in fields:
 			#delete field from each GridRow
 			for row in self.grid:		
