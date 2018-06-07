@@ -138,11 +138,15 @@ def parse(contents,dynamicType=True,noneEmpty=True,sep=',',listSep=';'):
 		for row in contents:
 			newRow = []
 			for element in row:
-				if len(element.split(listSep)) > 1:
-					if element[0] == '[' and element[-1] == ']':
-						element = element[1:-1]
-					newRow.append(element.split(listSep))
-				else: newRow.append(element)
+				if element != None:
+					if len(element.split(listSep)) > 1:
+						if element[0] == '[' and element[-1] == ']':
+							element = element[1:-1]
+						newRow.append(element.split(listSep))
+					else:
+						newRow.append(element)
+				else:
+					newRow.append(element)
 			filteredContents.append(newRow)
 		contents = filteredContents
 	# set values type automatically
