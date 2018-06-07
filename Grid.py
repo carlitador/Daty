@@ -160,9 +160,6 @@ class GridRow(object):
 		newHeader.pop(index)
 		self.header = newHeader
 		return element
-		# # this function could be simplified as:
-		# self.header.pop(self._fieldIndexDict[field])
-		# self._elements.pop(self._fieldIndexDict[field])
 
 	def keys(self):
 		'''
