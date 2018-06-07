@@ -345,6 +345,10 @@ class Grid(object):
 			if type(index.start) == int:
 				return Grid([gridrow.elements for gridrow in self.grid[index]],header=self.header)
 			elif type(index.start) == str:
+				fields = self.header[self.header.index(index.start):self.header.index(index.stop)]
+				columns = [self[field] for field in fields]
+				return Grid(zip(*columns),header=fields)
+			elif type(index.start) == str:
 				raise KeyError('Type'+str(type(index))+'not supported.')
 		elif callable(index):
 			return [index(gridrow) for gridrow in self]
