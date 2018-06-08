@@ -69,7 +69,7 @@ grid['new_column'] = 0                                                  # Add a 
 grid['new_column'] = a_list_of_values                                   # Add a new column with a list of values.
 grid['new_column'] = lambda row: (row['Total_Fy'] + row['Total_Fz'])**2 # Add a new column by combining the values of other columns.
 ```
-#### Plotting (requires pyVeo)
+#### Plotting (requires Matplotlib and Numpy).
 - Basic plotting capabilities are provided:
 ```python
 gird.plot_line('speed','Total_Fx')              # Line plot
