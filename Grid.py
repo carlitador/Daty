@@ -843,25 +843,19 @@ class Grid(object):
 
 	# plotting
 
-	def plot_line(self,xFields,yFields,*args,**kwargs):
+	def plot_line(self,xField,yField,*args,**kwargs):
 		'''
 		[Description]
 			Basic 2d line plot of given fields.
 		[Arguments]
-			xFields (list[str]/str): Name of field (or list of field names) to use as X values.
-			yFields (list[str]/str): Name of field (or list of field names) to use as Y values.
+			xField (list[str]/str): Name of field to use as X values.
+			yField (list[str]/str): Name of field to use as Y values.
 			*args (misc): Args passed to pyVeo.static.basic2D()
 			**kwargs (misc): Kwargs passed to pyVeo.static.basic2D()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
 		from pyVeo import static
-		if type(xFields) != list:
-			xFields = [xFields]
-		if type(yFields) != list:
-			yFields = [yFields]
-		xFields = [self[field] for field in xFields]
-		yFields = [self[field] for field in yFields]
-		return static.plot_line(xFields,yFields,*args,**kwargs)
+		return static.plot_line(self[xField],self[yField],*args,**kwargs)
 
 	def plot_contour(self,xField,yField,zField,*args,**kwargs):
 		'''
