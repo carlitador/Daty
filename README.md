@@ -2,9 +2,11 @@
 Data manipulation toolbox.
 
 ## Dependancies
-- pyVeo (optional)
+- Matplotlib (optional, for easy plotting).
+- Numpy (optional, for easy plotting).
+- Scipy (optional, for plotting splines).
 
-## Usage Guide - Grid
+## Usage Guide: Grid
 #### Basics
 - Initialize Grid:
 ```python
@@ -19,7 +21,7 @@ grid = Grid([],['speed','leeway','Total_Fx','Total_Fy'])
 ```python
 print grid.header               # Data header (column names).
 print len(grid)                 # Number of rows.
-print grid.shape()               # Number of rows x Number of columns.
+print grid.shape()              # Number of rows x Number of columns.
 print grid.head()               # Grid first 4 rows (can pass any other number of rows as argument).
 print grid.tail()               # Grid last 4 rows (can pass any other number of rows as argmuent).
 print grid.bounds('Total_Fx')   # Min anx max bounds of 'Total_Fx' field (column).
@@ -48,7 +50,6 @@ some_row.keys()           # Get all row fields as a list.
 some_row.pop('Total_Fx')  # Remove field field from row (does not affect original Grid).
 some_row.round(2)         # Row values with floats rounded to 2 decimal places.
 some_row.asDict()         # OrdereDict equivalent of row.
-some_row.asString()       # String representation of row.
 
 ```
 #### Filtering data
@@ -85,7 +86,7 @@ gird.plot_line('speed','Total_Fx',ax=ax) # Line plot
 gird.plot_line('speed','Total_Fx',title='Force [N]',color='r',marker='o',splineDensity=100) # Line plot
 ```
 
-## Usage Guide - SmartJson
+## Usage Guide: SmartJson
 #### Basics
 - Initialize SmartJson:
 ```python
