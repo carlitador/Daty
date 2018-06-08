@@ -854,8 +854,8 @@ class Grid(object):
 			**kwargs (misc): Kwargs passed to pyVeo.static.basic2D()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
-		from pyVeo import static
-		return static.plot_line(self[xField],self[yField],*args,**kwargs)
+		import plotting
+		return plotting.plot_line(self[xField],self[yField],*args,**kwargs)
 
 	def plot_contour(self,xField,yField,zField,*args,**kwargs):
 		'''
@@ -869,8 +869,8 @@ class Grid(object):
 			**kwargs (misc): Kwargs passed to pyVeo.static.contour()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
-		from pyVeo import static
-		return static.plot_contour(self[xField], self[yField], self[zField],*args,**kwargs)
+		import plotting
+		return plotting.plot_contour(self[xField], self[yField], self[zField],*args,**kwargs)
 
 	def plot_surface(self,xField,yField,zField,*args,**kwargs):
 		'''
@@ -884,8 +884,8 @@ class Grid(object):
 			**kwargs (misc): Kwargs passed to pyVeo.static.basic3D()
 			->return (matplotlib.ax): Matplotlib figure axes.
 		'''
-		from pyVeo import static
-		return static.plot_surface(self[xField], self[yField], self[zField],*args,**kwargs)
+		import plotting
+		return plotting.plot_surface(self[xField], self[yField], self[zField],*args,**kwargs)
 
 if __name__ == '__main__':
 
