@@ -49,6 +49,7 @@ def fitSpline(x,y,nPoints):
             return x,y
     else:
         print 'WARNING [plotting]: Scipy package missing, spline interpolation aborted.'
+        return x,y
 
 def arrangeSubplots(number_of_subplots,transpose=True):
 	'''
