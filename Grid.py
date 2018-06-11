@@ -122,6 +122,11 @@ class GridRow(object):
 			else:
 				return False
 			return True
+		elif isinstance(other,list):
+			if self.elements == other:
+				return True
+			else:
+				return False
 		else:
 			print '[GridRow|__eq__]: Non compatible types',self.__class__,'and',other.__class__
 
@@ -282,33 +287,11 @@ class Grid(object):
 		'''
 		[Description]
 			Add row or Grid to current grid.
-			Differing header entries are matched with missing values set to fill_value.
 		[Arguments]
 			newRow (list/GridRow/Grid): List, GridRow or Grid to add to grid.
 			*fill_value (float / float list): Value to be used for filling unmatched columns.
 		'''
-		newRow = deepcopy(newRow)
-		# add gridrow to grid
-		if isinstance(newRow,GridRow):
-			#match headers
-			self.match(newRow,fill_value)
-			#add row to grid.
-			self.grid.append(newRow)
-		# list given, assume both headers match
-		elif isinstance(newRow,list):
-			if len(newRow) == len(self.header):
-				self.grid.append(GridRow(newRow,self.header))
-			else:
-				raise IndexError('New row ('+str(len(newRow))+') does not have compatible length with Grid ('+str(len(self.header))+')')
-		# Grid given, add all its gridrows to grid
-		elif isinstance(newRow, Grid):
-			for row in newRow:
-				#match headers
-				self.match(row,fill_value)
-				#add row to grid.
-				self.grid.append(row)
-		else:
-			raise TypeError('[Grid|__add__]: Not implemented yet for type '+str(type(newRow)))
+		self.addRow(newRow,fill_value)
 
 	def __getitem__(self,index):
 		'''
@@ -403,13 +386,10 @@ class Grid(object):
 
 	def __sub__(self,row):
 		'''
-		[Description]
-			Delete row from grid. To delete a row by index use .pop()
-		[Arguments]:
-			row (GridRow): GridRow to delete.
+		Remove DataRow from Grid.
 		'''
-		self.grid.remove(row)
-
+		self.removeRow(row)
+					
 	# private methods
 
 	def _initHeader(self,header):
@@ -634,11 +614,53 @@ class Grid(object):
 		'''
 		return Grid([row.elements for row in self.grid if None not in row.elements],header=self.header)
 
-	def removeRow(self,index):
+	def addRow(self,newRow,fill_value=None):
 		'''
-		Remove row by index.
+		[Description]
+			Add row or Grid to current grid.
+			Differing header entries are matched with missing values set to fill_value.
+		[Arguments]
+			newRow (list/GridRow/Grid): List, GridRow or Grid to add to grid.
+			*fill_value (float / float list): Value to be used for filling unmatched columns.
 		'''
-		self.grid.pop(index)
+		newRow = deepcopy(newRow)
+		# add gridrow to grid
+		if isinstance(newRow,GridRow):
+			#match headers
+			self.match(newRow,fill_value)
+			#add row to grid.
+			self.grid.append(newRow)
+		# list given, assume both headers match
+		elif isinstance(newRow,list):
+			if len(newRow) == len(self.header):
+				self.grid.append(GridRow(newRow,self.header))
+			else:
+				raise IndexError('New row ('+str(len(newRow))+') does not have compatible length with Grid ('+str(len(self.header))+')')
+		# Grid given, add all its gridrows to grid
+		elif isinstance(newRow, Grid):
+			for row in newRow:
+				#match headers
+				self.match(row,fill_value)
+				#add row to grid.
+				self.grid.append(row)
+		else:
+			raise TypeError('[Grid|__add__]: Not implemented yet for type '+str(type(newRow)))
+
+	def removeRow(self,row):
+		'''
+		[Description]
+			Remove GridRow from Grid.
+		[Arguments]:
+			row (GridRow/int/list): GridRow, row index or row elements of row to delete.
+		'''
+		if isinstance(row,int):
+			self.removeRow(row)
+		elif isinstance(row,list):
+			for i,gridrow in enumerate(self):
+				if gridrow == row:
+					self.grid.pop(i)
+		elif isinstance(row,GridRow):
+			self.grid.remove(row)
 
 	def row(self,index):
 		'''
