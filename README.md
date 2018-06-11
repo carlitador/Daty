@@ -14,8 +14,9 @@ Data manipulation toolbox.
 grid = Grid(pathToFile)
 # or, initialize direct from list of lists:
 grid = Grid(some_list_of_lists)
-# or, initialize emtpy with a header:
-grid = Grid([],['speed','leeway','Total_Fx','Total_Fy'])
+# or, initialize emtpy:
+grid = Grid([],['speed','leeway','Total_Fx','Total_Fy']) # With header.
+grid = Grid([],[]) # Without header.
 ```
 - Get data info:
 ```python
@@ -64,10 +65,16 @@ grid[{'funcs':lambda row:row['Total_Fx']+row['Total_Fy'] > 1000}]   # Get rows t
 grid[{'Total_Fx':'10'}]grid[{'Total_Fx':'>2'}][{'funcs':lambda row:row['Total_Fx']+row['Total_Fy'] > 1000}]
 ```
 #### Adding data to grid
+- Adding columns:
 ```python
-grid['new_column'] = 0                                                  # Add a new column with all values set to 0.
-grid['new_column'] = a_list_of_values                                   # Add a new column with a list of values.
-grid['new_column'] = lambda row: (row['Total_Fy'] + row['Total_Fz'])**2 # Add a new column by combining the values of other columns.
+grid['new_column'] = 0                                                      # Add a new column with all values set to 0.
+grid['new_column'] = a_list_of_values                                       # Add a new column with a list of values.
+grid['new_column'] = lambda row: (row['Total_Fy'] + row['Total_Fz'])**2     # Add a new column by combining the values of other columns.
+```
+- Adding rows:
+```python
+grid + [3.5,1.0,1500,2300]      # Add a new row (length and order of elements must match grid header).
+grid + another_grid             # Add all rows from another Grid (columns that do not match are filled with None values).
 ```
 #### Plotting (requires Matplotlib and Numpy).
 - Basic plotting capabilities are provided:
