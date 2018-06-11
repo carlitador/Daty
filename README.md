@@ -100,5 +100,5 @@ gird.plot_line('speed','Total_Fx',title='Force [N]',color='r',marker='o',splineD
 # Initialize from folder structure:
 sjson = SmartJson(pathToFolder)
 # or, initialize from JSON file:
-sjson = Grid(pathToFile)
+sjson = SmartJson(pathToFile)
 ```
