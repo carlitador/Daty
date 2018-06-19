@@ -71,7 +71,9 @@ def dynamicTyped(s,forceFloat=True):
 			return s
 		except IndexError:
 			return s
-	#check that given variable is a string
+	#check that given variable is a string (or unicode)
+	if isinstance(s,unicode):
+		s = str(s)
 	if type(s) == str:
 		#check if string is None, bool, float or int
 		if isNone(s):
