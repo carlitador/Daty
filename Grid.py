@@ -608,11 +608,17 @@ class Grid(object):
 		gridRow.header = sorted(gridRow.header,key=self.header.index)
 		gridRow.elements = [tmp[header] for header in gridRow.header]
 
-	def removeNone(self):
+	def removeNone(self,field=None):
 		'''
-		Remove rows with None values.
+		[Description]
+			Remove rows with None values.
+		[Arguments]
+			*field (str): Field checked for NoneType to decide if row is kept. 
 		'''
-		return Grid([row.elements for row in self.grid if None not in row.elements],header=self.header)
+		if field == None:
+			return Grid([row.elements for row in self.grid if None not in row.elements],header=self.header)
+		else:
+			return Grid([row.elements for row in self.grid if row[field] != None],header=self.header)
 
 	def addRow(self,newRow,fill_value=None):
 		'''
