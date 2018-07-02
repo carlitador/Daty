@@ -271,6 +271,7 @@ def matchDicts(dict1,dict2):
 	[Description]
 		Change dictionary values by matching keys from another dictionary.
 		All the keys of dict 1 that appear in dict 2 will be modified to dict 2 value.
+		Any comments dict 1 may have will remain unmodified.
 	[Arguments]
 		dict1 (dict): Dict being replaced its values by another.
 		dict2 (dict): Dict replacing the values to another.
