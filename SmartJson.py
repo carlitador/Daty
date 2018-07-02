@@ -18,7 +18,7 @@ def flattenDict(dictToFlatten,separator=':',dictConstructor=OrderedDict):
 		if isinstance(value,dict):
 			new_dict[key] = value
 			_dict = dictConstructor()
-			for _key, _value in flattenDict(value).items():
+			for _key, _value in flattenDict(value,separator=separator,dictConstructor=OrderedDict).items():
 				_dict[separator.join([key,_key])] = _value
 			new_dict.update(_dict)
 		elif isinstance(value, list):
@@ -29,7 +29,7 @@ def flattenDict(dictToFlatten,separator=':',dictConstructor=OrderedDict):
 				listElementCounter = 0
 				for dictElement in value:
 					_dict = dictConstructor()
-					for _subKey, _subValue in flattenDict(dictElement).items():
+					for _subKey, _subValue in flattenDict(dictElement,separator=separator,dictConstructor=OrderedDict).items():
 						_dict[separator.join([key,str(listElementCounter),_subKey])] = _subValue
 					new_dict.update(_dict)
 					listElementCounter += 1
@@ -204,13 +204,14 @@ def isJsonField(s):
 	else:
 		return False
 
-def dictToJsonString(jsonDict,pretty=True,tabIndex=1,init=True):
+def dictToJsonString(jsonDict,pretty=True,indent='\t',tabIndex=1,init=True):
 	'''
 	[Description]
 		Convert dict or OrderedDict into its JSON string representation.
 	[Arguments]
 		jsonDict (dict): JSON dictionary.
-		*pretty (bool): Tabulate rows for better readability.
+		*pretty (bool): Indent rows for better readability.
+		*indent (str): Type of indent to use when pretty = True.
 		*tabIdenx (int): Current tabulate depth level.
 		*init (bool): Set to True on first call so that no commas are added to last closing bracket.
 		->return (str): JSON string representation of dictionary-like object.
@@ -227,9 +228,9 @@ def dictToJsonString(jsonDict,pretty=True,tabIndex=1,init=True):
 	jsonString = '{\n'
 	# string to prepend to all fields inside current section so that they have corresponding tab depth.
 	if pretty == True:
-		tab = ''.join(['\t' for i in range(tabIndex)])
-		tab_next = ''.join(['\t' for i in range(tabIndex+1)])
-		tab_prev = ''.join(['\t' for i in range(tabIndex-1)])
+		tab = ''.join([indent for i in range(tabIndex)])
+		tab_next = ''.join([indent for i in range(tabIndex+1)])
+		tab_prev = ''.join([indent for i in range(tabIndex-1)])
 	else:
 		tab = tab_next = tab_prev = ''
 	for field in jsonDict:
