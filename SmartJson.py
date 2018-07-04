@@ -236,14 +236,14 @@ def dictToJsonString(jsonDict,pretty=True,indent='\t',tabIndex=1,init=True):
 	for field in jsonDict:
 		if isinstance(jsonDict[field],dict):
 			jsonString += tab+'"'+field+'":\n'
-			jsonString += tab+dictToJsonString(jsonDict[field],pretty,tabIndex+1,init=False)
+			jsonString += tab+dictToJsonString(jsonDict[field],pretty=pretty,indent=indent,tabIndex=tabIndex+1,init=False)
 		elif type(jsonDict[field]) == list:
 			if len(jsonDict[field]) > 0:
 				if isinstance(jsonDict[field][0],dict):
 					jsonString += tab+'"'+field+'":\n'
 					jsonString += tab+'[\n'
 					for i,listElement in enumerate(jsonDict[field]):
-						jsonString += tab_next+dictToJsonString(jsonDict[field][i],pretty,tabIndex+2,init=False)
+						jsonString += tab_next+dictToJsonString(jsonDict[field][i],pretty=pretty,indent=indent,tabIndex=tabIndex+2,init=False)
 					jsonString = jsonString[:-2]+'\n' # remove last comma.
 					jsonString += tab+'],\n'
 				else:
