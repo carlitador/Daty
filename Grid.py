@@ -541,11 +541,11 @@ class Grid(object):
 
 	def asJson(self,roundFloats=None):
 		'''
-		Return Grid in json format as:
+		Return Grid in json format, e.g;
 			gridAsJson = [
-							{'row':i,'TWS':10,'TWA':45,'Vs':12,...},
-							{'row':i,'TWS':10,'TWA':45,'Vs':12,...},
-							{'row':i,'TWS':10,'TWA':45,'Vs':12,...}
+							{'TWS':10,'TWA':45,'Vs':12,...},
+							{'TWS':10,'TWA':45,'Vs':12,...},
+							{'TWS':10,'TWA':45,'Vs':12,...}
 						]
 					
 		'''
