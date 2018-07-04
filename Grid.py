@@ -546,8 +546,7 @@ class Grid(object):
 							{'TWS':10,'TWA':45,'Vs':12,...},
 							{'TWS':10,'TWA':45,'Vs':12,...},
 							{'TWS':10,'TWA':45,'Vs':12,...}
-						]
-					
+						]		
 		'''
 		gridAsJson = []
 		if roundFloats == None:
