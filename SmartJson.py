@@ -357,7 +357,7 @@ class SmartJson(object):
 		'''
 		keyVals = []
 		for key in self:
-			keyVals.append(key)
+			keyVals.append(key+'-->'+str(self[key]))
 		return '\n'.join(keyVals)
 
 	def asDict(self):
@@ -616,14 +616,20 @@ class SmartJson(object):
 				self._comments.pop(key)
 		return _pop
 
-	def merge(self,path,smartJson):
+	def replaceComments(self,commentsDict,path=[]):
 		'''
+		[Description]
+			Replace current comments with new ones.
+		[Arguments]
+			commentsDict (dict): Dictionary linking each field with its corresponding comment.
+			*path (list): Path pointing to the depth level at which comments should be replaced, i.e.
+							this path will be pre-pended to each commentsDict key before
+							being replaced in self._comments.
 		'''
-		self[path] = smartJson.asDict()
-		for comment in smartJson._comments:
-			commentPath = ':'.join(path)+':'+comment
-			print 'Adding comment',commentPath,smartJson.comments[comment]
-			self._comments[commentPath] = smartJson.comments[comment]
+		for commentKey in commentsDict:
+			fullPath = ':'.join(path+[commentKey])
+			print 'replacing',commentKey,'-->',fullPath
+			self._comments[fullPath] = commentsDict[commentKey]
 
 	def rename(self,pathToCurrent,new):
 		'''
