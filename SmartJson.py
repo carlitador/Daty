@@ -628,7 +628,6 @@ class SmartJson(object):
 		'''
 		for commentKey in commentsDict:
 			fullPath = ':'.join(path+[commentKey])
-			print 'replacing',commentKey,'-->',fullPath
 			self._comments[fullPath] = commentsDict[commentKey]
 
 	def rename(self,pathToCurrent,new):
