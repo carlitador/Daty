@@ -1,4 +1,4 @@
-# Daty v1.0
+# Daty
 Data manipulation toolbox.
 
 ## Dependancies
@@ -6,7 +6,7 @@ Data manipulation toolbox.
 - Numpy (optional, for easy plotting).
 - Scipy (optional, for plotting splines).
 
-## Usage Guide: Grid
+## Usage Guide
 #### Basics
 - Initialize Grid:
 ```python
@@ -91,14 +91,4 @@ gird.plot_line('speed','Total_Fx',ax=ax) # Line plot
 - Plotting functions take several arguments to control formatting (see pyVeo):
 ```python
 gird.plot_line('speed','Total_Fx',title='Force [N]',color='r',marker='o',splineDensity=100) # Line plot
-```
-
-## Usage Guide: SmartJson
-#### Basics
-- Initialize SmartJson:
-```python
-# Initialize from folder structure:
-sjson = SmartJson(pathToFolder)
-# or, initialize from JSON file:
-sjson = SmartJson(pathToFile)
 ```
