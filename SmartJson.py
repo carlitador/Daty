@@ -630,6 +630,20 @@ class SmartJson(object):
 			fullPath = ':'.join(path+[commentKey])
 			self._comments[fullPath] = commentsDict[commentKey]
 
+	def merge(self,path,smartJson):
+		'''
+		[Description]
+			Merge SMartJson with another SmartJson.
+		[Arguments]
+			path (str): Path to insert new SmartJson fields.
+			smartJson (SmartJson): SmartJson to insert.
+		'''
+		self[path] = smartJson.asDict() # Add dict.
+		# Add comments.
+		for comment in smartJson._comments:
+			commentPath = ':'.join(path)+':'+comment
+			self._comments[commentPath] = smartJson.comments[comment]
+
 	def rename(self,pathToCurrent,new):
 		'''
 		[Description]
