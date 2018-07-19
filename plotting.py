@@ -4,19 +4,19 @@ from matplotlib import cm
 from matplotlib.mlab import griddata
 from mpl_toolkits.mplot3d import Axes3D
 try:
-    import matplotlib.style
-    matplotlib.style.use('ggplot')
+	import matplotlib.style
+	matplotlib.style.use('ggplot')
 except:
 	print "WARNING [plotting]: Cannot use ggplot style due to Matplotlib version being too low."
 import pylab
 import math
 import numpy as np
 try:
-    from scipy import interpolate
-    _CAN_INTERPOLATE = True
+	from scipy import interpolate
+	_CAN_INTERPOLATE = True
 except:
-    _CAN_INTERPOLATE = False
-    print "WARNING [plotting]: Scipy package missing, spline interpolation will not be available."
+	_CAN_INTERPOLATE = False
+	print "WARNING [plotting]: Scipy package missing, spline interpolation will not be available."
 from collections import Counter
 
 # Utilities
@@ -31,25 +31,25 @@ def fitSpline(x,y,nPoints):
 		nPoints (int): Number of (equally spaced) interpolation points.
 		->return (tuple[list[float],list[float]]): Interpolated X and Y data points.
 	'''
-    if _CAN_INTERPOLATE:
-        try:
-            #check for duplicated entries
-            dups = [k for k,v in Counter(x).items() if v>1]
-            if len(dups) > 0:
-                print 'Warning, duplicated X values found in data when fitting spline: ',dups
-            #sort by x
-            x,y = zip(*list(sorted(zip(x,y))))
-            #interpolate
-            tck = interpolate.splrep(x, y,s=0)
-            xnew = np.linspace(min(x),max(x),nPoints)
-            ynew = interpolate.splev(xnew, tck, der=0)
-            return xnew,ynew.tolist()
-        except:
-            print 'WARNING [plotting]: Spline interpolation failed.'
-            return x,y
-    else:
-        print 'WARNING [plotting]: Scipy package missing, spline interpolation aborted.'
-        return x,y
+	if _CAN_INTERPOLATE:
+		try:
+			#check for duplicated entries
+			dups = [k for k,v in Counter(x).items() if v>1]
+			if len(dups) > 0:
+				print 'Warning, duplicated X values found in data when fitting spline: ',dups
+			#sort by x
+			x,y = zip(*list(sorted(zip(x,y))))
+			#interpolate
+			tck = interpolate.splrep(x, y,s=0)
+			xnew = np.linspace(min(x),max(x),nPoints)
+			ynew = interpolate.splev(xnew, tck, der=0)
+			return xnew,ynew.tolist()
+		except:
+			print 'WARNING [plotting]: Spline interpolation failed.'
+			return x,y
+	else:
+		print 'WARNING [plotting]: Scipy package missing, spline interpolation aborted.'
+		return x,y
 
 def arrangeSubplots(number_of_subplots,transpose=True):
 	'''
@@ -159,7 +159,7 @@ def smartSubplots(plots,legendSize=6,save=False,size=None,tight=True,show=True):
 	return fig
 
 def plot_contour(xArray,yArray,zArray,ax=None,xLabel='X',yLabel='Y',title='',
-            levels=20,density='auto',scatter=False,grid=True,
+			levels=20,density='auto',scatter=False,grid=True,
 			interpolation='linear',save=True,show='auto'):
 	'''
 	[Description]
@@ -221,8 +221,8 @@ def plot_contour(xArray,yArray,zArray,ax=None,xLabel='X',yLabel='Y',title='',
 	return ax
 
 def plot_surface(xArray, yArray, zArray, ax=None, xLabel='X', yLabel='Y', zLabel='Z', title='',
-            view=None, contourLines=True, density=10, scatter=False, grid=True,
-            interpolation='linear', save=False, show='auto'):
+			view=None, contourLines=True, density=10, scatter=False, grid=True,
+			interpolation='linear', save=False, show='auto'):
 	'''
 	[Description]
 		3D surface plot.
