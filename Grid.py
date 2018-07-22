@@ -130,6 +130,12 @@ class GridRow(object):
 		else:
 			print '[GridRow|__eq__]: Non compatible types',self.__class__,'and',other.__class__
 
+	def __ne__(self,other):
+		'''
+		A GridRow is not equal to another one if any of the elements is different.
+		'''
+		return not self.__eq__(other)
+
 	def __iter__(self):
 		'''
 		Gridrow is treated as a list of elements.
