@@ -1,5 +1,5 @@
 # Daty
-Data manipulation toolbox.
+Tabular data manipulation and visualization toolbox.
 
 ## Dependancies
 - Matplotlib (optional, for easy plotting).
