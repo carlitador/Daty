@@ -1,9 +1,9 @@
-# Standard library
+# Standard library.
 from copy import copy, deepcopy
 from collections import OrderedDict
 import json
 from numbers import Number
-# Utils
+# Utils.
 from utils import dynamicTyped, parse
 
 '''
