@@ -106,7 +106,7 @@ def dynamicTyped(s,forceFloat=True):
 			return s_temp
 		else:
 			return asString(s)
-	elif type(s) == list:
+	elif isinstance(s,list):
 		return [dynamicTyped(i) for i in s]
 	else:
 		return s

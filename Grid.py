@@ -220,7 +220,7 @@ class GridRow(object):
 		'''
 		textElements = []
 		for element in self:
-			if type(element) == list:
+			if isinstance(element,list):
 				textElements.append('['+listSeparator.join([str(e) for e in element])+']')
 			else:
 				textElements.append(str(element))
@@ -276,7 +276,7 @@ class Grid(object):
 			with open(grid,'r') as f: grid = f.readlines()
 			self.grid = parse(grid,**kwargs)
 		# grid given as a list of lists. Grid is assigned to gridrows directly.
-		elif type(grid) == list:
+		elif isinstance(grid,list):
 			self.grid = grid
 		else:
 			raise TypeError('ERROR [pyDSO.Grid]: Unkown grid format.')
@@ -321,7 +321,7 @@ class Grid(object):
 			return self.grid[index]
 		elif type(index) == dict:
 			return self.filter(index)
-		elif type(index) == list:
+		elif isinstance(index,list):
 			if type(index[0]) == int:
 				return Grid([self.grid[e].elements for e in index],header=self.header)
 			elif type(index[0]) == str:
@@ -358,7 +358,7 @@ class Grid(object):
 		assert(type(field) == str) # check a field is given.
 		for i,row in enumerate(self.grid):
 			#assign list corresponding value
-			if type(newValue) == list:
+			if isinstance(newValue,list):
 				row[field] = newValue[i]
 			#calculate value with function
 			elif callable(newValue):
@@ -507,7 +507,7 @@ class Grid(object):
 			parsedLine = []
 			#check if item is a list and parse it accordingly to avoid quote marks.
 			for item in line:
-				if type(item) == list:
+				if isinstance(item,list):
 					parsedLine.append('['+listSeparator.join([str(i) for i in item])+']')
 				else:
 					parsedLine.append(str(item))
